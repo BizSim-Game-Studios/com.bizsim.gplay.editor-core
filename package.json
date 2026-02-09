@@ -1,6 +1,6 @@
 {
   "name": "com.bizsim.gplay.editor-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "BizSim Google Play - Editor Core",
   "description": "Shared editor utilities for all BizSim Google Play packages. Provides package detection, scripting define management, and the unified Package Dashboard window.",
   "unity": "6000.3",

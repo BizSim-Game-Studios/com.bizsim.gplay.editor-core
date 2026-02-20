@@ -107,7 +107,8 @@ namespace BizSim.GPlay.EditorCore
                 {
                     var oldColor = GUI.color;
                     GUI.color = Color.green;
-                    EditorGUILayout.LabelField($"Installed (v{version})", EditorStyles.boldLabel);
+                    string versionLabel = !string.IsNullOrEmpty(version) ? $"Installed (v{version})" : "Installed";
+                    EditorGUILayout.LabelField(versionLabel, EditorStyles.boldLabel);
                     GUI.color = oldColor;
                 }
                 else

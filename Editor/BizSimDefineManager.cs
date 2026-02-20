@@ -37,13 +37,9 @@ namespace BizSim.GPlay.EditorCore
         {
             if (targetGroup == BuildTargetGroup.Unknown) return false;
 
-            #if UNITY_2023_1_OR_NEWER
             NamedBuildTarget namedTarget = GetNamedBuildTarget(targetGroup);
             if (namedTarget == NamedBuildTarget.Unknown) return false;
             string defines = PlayerSettings.GetScriptingDefineSymbols(namedTarget);
-            #else
-            string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
-            #endif
             return defines.Split(';').Contains(define);
         }
 
@@ -72,13 +68,9 @@ namespace BizSim.GPlay.EditorCore
             {
                 if (targetGroup == BuildTargetGroup.Unknown) continue;
 
-                #if UNITY_2023_1_OR_NEWER
                 NamedBuildTarget namedTarget = GetNamedBuildTarget(targetGroup);
                 if (namedTarget == NamedBuildTarget.Unknown) continue;
                 string defines = PlayerSettings.GetScriptingDefineSymbols(namedTarget);
-                #else
-                string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
-                #endif
 
                 var defineList = defines.Split(';').ToList();
 
@@ -87,11 +79,7 @@ namespace BizSim.GPlay.EditorCore
                     defineList.Add(define);
                     string newDefines = string.Join(";", defineList.Where(d => !string.IsNullOrEmpty(d)));
 
-                    #if UNITY_2023_1_OR_NEWER
                     PlayerSettings.SetScriptingDefineSymbols(namedTarget, newDefines);
-                    #else
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, newDefines);
-                    #endif
 
                     Debug.Log($"[BizSim] Added {define} to {targetGroup}");
                 }
@@ -107,13 +95,9 @@ namespace BizSim.GPlay.EditorCore
             {
                 if (targetGroup == BuildTargetGroup.Unknown) continue;
 
-                #if UNITY_2023_1_OR_NEWER
                 NamedBuildTarget namedTarget = GetNamedBuildTarget(targetGroup);
                 if (namedTarget == NamedBuildTarget.Unknown) continue;
                 string defines = PlayerSettings.GetScriptingDefineSymbols(namedTarget);
-                #else
-                string defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
-                #endif
 
                 var defineList = defines.Split(';').ToList();
 
@@ -122,11 +106,7 @@ namespace BizSim.GPlay.EditorCore
                     defineList.Remove(define);
                     string newDefines = string.Join(";", defineList.Where(d => !string.IsNullOrEmpty(d)));
 
-                    #if UNITY_2023_1_OR_NEWER
                     PlayerSettings.SetScriptingDefineSymbols(namedTarget, newDefines);
-                    #else
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, newDefines);
-                    #endif
 
                     Debug.Log($"[BizSim] Removed {define} from {targetGroup}");
                 }
@@ -167,10 +147,13 @@ namespace BizSim.GPlay.EditorCore
         /// </summary>
         private static BuildTargetGroup[] GetAllPlatforms()
         {
-            return System.Enum.GetValues(typeof(BuildTargetGroup))
-                .Cast<BuildTargetGroup>()
-                .Where(g => g != BuildTargetGroup.Unknown)
-                .ToArray();
+            return new[]
+            {
+                BuildTargetGroup.Android,
+                BuildTargetGroup.iOS,
+                BuildTargetGroup.Standalone,
+                BuildTargetGroup.WebGL
+            };
         }
 
         /// <summary>
@@ -188,7 +171,6 @@ namespace BizSim.GPlay.EditorCore
         /// </summary>
         private static NamedBuildTarget GetNamedBuildTarget(BuildTargetGroup targetGroup)
         {
-            #if UNITY_2023_1_OR_NEWER
             return targetGroup switch
             {
                 BuildTargetGroup.Android => NamedBuildTarget.Android,
@@ -197,9 +179,6 @@ namespace BizSim.GPlay.EditorCore
                 BuildTargetGroup.WebGL => NamedBuildTarget.WebGL,
                 _ => NamedBuildTarget.Unknown
             };
-            #else
-            return default;
-            #endif
         }
 
         /// <summary>
